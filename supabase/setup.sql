@@ -6,20 +6,17 @@
 -- Access model:
 --   * Everyone (anon) can SELECT — the public site reads with the anon key.
 --   * Only the allowlisted admin email can INSERT/UPDATE/DELETE.
--- The admin email is read from the `app.admin_email` GUC so it lives in one
--- place; set it once below (and keep it in sync with NEXT_PUBLIC_ADMIN_EMAIL).
+-- The admin email is hardcoded in is_admin() below — if it ever changes, update
+-- it here and keep it in sync with NEXT_PUBLIC_ADMIN_EMAIL.
 
--- 1. Pin the admin email for this database.
-alter database postgres set app.admin_email = 'hello@weareyume.com';
-
--- Helper: is the current request the admin?
+-- 1. Helper: is the current request the admin?
 create or replace function public.is_admin()
 returns boolean
 language sql
 stable
 as $$
   select coalesce(
-    lower(auth.jwt() ->> 'email') = lower(current_setting('app.admin_email', true)),
+    lower(auth.jwt() ->> 'email') = 'hello@weareyume.com',
     false
   );
 $$;
