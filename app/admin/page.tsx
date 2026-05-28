@@ -1,6 +1,8 @@
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import {
   DEFAULT_CONTENT,
+  ADMIN_EMAIL,
   type SiteContent,
   type Demo,
   type SessionRow,
@@ -39,6 +41,13 @@ export default async function AdminPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // Real allowlist enforcement (the edge middleware only does a cheap cookie
+  // check). Anyone who isn't the admin email is bounced to the login screen.
+  if (!user) redirect("/admin/login?error=signin_required");
+  if (user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+    redirect("/admin/login?error=not_allowed");
+  }
 
   const [contentRes, demosRes, sessionsRes, galleryRes, faqsRes] =
     await Promise.all([
