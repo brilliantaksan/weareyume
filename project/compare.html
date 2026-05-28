@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yu+Me — Hero Comparison</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    @font-face {
+      font-family: 'Lastik';
+      src: url('assets/Lastik.woff2') format('woff2');
+      font-display: swap;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #ece7df;
+      color: #181410;
+      min-height: 100vh;
+      padding: 48px 32px;
+    }
+    .compare-head {
+      max-width: 1400px;
+      margin: 0 auto 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .compare-head h1 {
+      font-family: 'Lastik', serif;
+      font-size: clamp(40px, 5vw, 64px);
+      line-height: .95;
+      letter-spacing: -.02em;
+      font-weight: 400;
+    }
+    .compare-head p {
+      font-size: 15px;
+      color: #4a423a;
+      max-width: 480px;
+      line-height: 1.5;
+    }
+    .compare-head a.back {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 22px;
+      background: #181410; color: #fbf9f5;
+      border-radius: 999px;
+      font-size: 14px;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .compare-head a.back:hover { background: #ff3d7a; }
+    .compare-grid {
+      max-width: 1800px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    @media (max-width: 1100px) {
+      .compare-grid { grid-template-columns: 1fr; }
+    }
+    .variant {
+      background: #fbf9f5;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px -40px rgba(0,0,0,.3);
+    }
+    .variant-head {
+      padding: 24px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(24,20,16,.08);
+      background: #fff;
+    }
+    .variant-name {
+      font-family: 'Lastik', serif;
+      font-size: 22px;
+      letter-spacing: -.01em;
+    }
+    .variant-label {
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #4a423a;
+    }
+    .variant-frame {
+      position: relative;
+      height: 720px;
+      overflow: hidden;
+      background: #fbf9f5;
+    }
+    .variant-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+    .variant-notes {
+      padding: 20px 28px;
+      background: #fff;
+      border-top: 1px solid rgba(24,20,16,.08);
+      font-size: 13px;
+      color: #4a423a;
+      line-height: 1.5;
+    }
+    .variant-notes strong { color: #181410; font-weight: 500; }
+    .variant-notes ul { list-style: none; }
+    .variant-notes li { padding: 4px 0; }
+    .variant-notes li::before { content: "→ "; color: #ff3d7a; }
+
+    .compare-foot {
+      max-width: 1400px;
+      margin: 48px auto 0;
+      padding: 32px;
+      background: #fff;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .compare-foot p { font-size: 14px; color: #4a423a; max-width: 600px; line-height: 1.5; }
+    .compare-foot a { color: #ff3d7a; border-bottom: 1px solid currentColor; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="compare-head">
+    <div>
+      <span style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#4a423a;">Variations · 比較</span>
+      <h1>Two hero treatments,<br/>side by side.</h1>
+    </div>
+    <p>Each variant uses the same color system, type system, and palette of crayon shapes. They diverge in layout, scale and mood. Pick one (or mix elements from both) — the rest of the site is shared.</p>
+    <a class="back" href="index.html">View full site →</a>
+  </div>
+
+  <div class="compare-grid">
+    <div class="variant">
+      <div class="variant-head">
+        <div class="variant-name">Hero A — Logo Card</div>
+        <div class="variant-label">Centered · Symmetric</div>
+      </div>
+      <div class="variant-frame">
+        <iframe src="index.html?hero=A&heroOnly=1" title="Hero A preview"></iframe>
+      </div>
+      <div class="variant-notes">
+        <strong>Closest to the brand mark.</strong> Big centered "Yu+Me" floating on a cloud of gradient blobs, with white crayon scribbles scattered around — essentially the profile picture extended into a full hero. Reads as: <em>identity-first, gentle, welcoming</em>.
+        <ul style="margin-top:10px;">
+          <li>Best for: first-time visitors who need to grok the brand</li>
+          <li>Tradeoff: less information density above the fold</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="variant">
+      <div class="variant-head">
+        <div class="variant-name">Hero B — Editorial Spread</div>
+        <div class="variant-label">Asymmetric · Magazine</div>
+      </div>
+      <div class="variant-frame">
+        <iframe src="index.html?hero=B&heroOnly=1" title="Hero B preview"></iframe>
+      </div>
+      <div class="variant-notes">
+        <strong>Zine / magazine feel.</strong> Yu+Me wordmark on the left, photo collage with pink crayon date stamps on the right, key info (where/when/cost) below the fold, and a marquee of past session dates at the bottom. Reads as: <em>active community, lots of receipts, drop in this Saturday</em>.
+        <ul style="margin-top:10px;">
+          <li>Best for: repeat visitors checking the next date</li>
+          <li>Tradeoff: heavier; more attention required</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare-foot">
+    <p>The current default is <strong>Hero A</strong>. Switch between the two anytime via the Tweaks panel inside the full site — <a href="index.html">try it →</a></p>
+    <a class="back" href="index.html" style="background:#181410;color:#fbf9f5;padding:12px 22px;border-radius:999px;font-size:14px;">Go to full site →</a>
+  </div>
+</body>
+</html>
