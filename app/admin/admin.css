@@ -1,0 +1,221 @@
+.adm {
+  --line: rgba(24, 20, 16, 0.12);
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  min-height: 100vh;
+  cursor: auto;
+}
+.adm-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 24px;
+  background: rgba(251, 249, 245, 0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.adm-bar .brand {
+  font-family: var(--serif);
+  font-size: 24px;
+}
+.adm-bar .who {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.adm-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 24px 120px;
+}
+.adm-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.adm-tab {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--ink-soft);
+}
+.adm-tab.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.adm-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.adm-card h3 {
+  margin: 0 0 14px;
+  font-family: var(--serif);
+  font-size: 22px;
+}
+.adm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.adm-field label {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.adm-field input,
+.adm-field textarea,
+.adm-field select {
+  font: inherit;
+  font-size: 15px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  outline: none;
+}
+.adm-field input:focus,
+.adm-field textarea:focus {
+  border-color: var(--hot-pink);
+}
+.adm-field textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+.adm-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 640px) {
+  .adm-row {
+    grid-template-columns: 1fr;
+  }
+}
+.adm-btn {
+  appearance: none;
+  border: none;
+  border-radius: 999px;
+  padding: 11px 22px;
+  font: inherit;
+  font-weight: 500;
+  font-size: 14px;
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+}
+.adm-btn:hover {
+  background: var(--hot-pink);
+}
+.adm-btn[disabled] {
+  opacity: 0.5;
+  cursor: default;
+}
+.adm-btn.ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+.adm-btn.danger {
+  background: transparent;
+  color: #c0203f;
+  border: 1px solid rgba(192, 32, 63, 0.3);
+}
+.adm-btn.danger:hover {
+  background: #c0203f;
+  color: #fff;
+}
+.adm-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 8px;
+}
+.adm-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.adm-item-head .ord {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.adm-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-size: 14px;
+  z-index: 50;
+  box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.4);
+}
+.adm-login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+  cursor: auto;
+}
+.adm-login-card {
+  text-align: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 48px 40px;
+  max-width: 420px;
+  box-shadow: 0 30px 80px -50px rgba(0, 0, 0, 0.4);
+}
+.adm-login-card .mark {
+  font-family: var(--serif);
+  font-size: 56px;
+  line-height: 1;
+}
+.adm-login-card p {
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 12px 0 28px;
+}
+.adm-login-err {
+  color: #c0203f;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+.adm-muted {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+.adm-hint {
+  background: #fff7e6;
+  border: 1px solid #ffe2ad;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6b4e00;
+  margin-bottom: 24px;
+}
