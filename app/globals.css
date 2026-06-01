@@ -75,8 +75,8 @@ button { font: inherit; color: inherit; }
 .cloud {
   position: absolute;
   border-radius: 50%;
-  filter: blur(60px);
-  opacity: 1;
+  filter: blur(70px);
+  opacity: .55;
   will-change: transform;
   mix-blend-mode: multiply;
 }
@@ -92,6 +92,8 @@ button { font: inherit; color: inherit; }
 @keyframes drift4 { from { transform: translate(0,0) scale(1); } to { transform: translate(-5vw,-3vh) scale(1.1); } }
 @keyframes drift5 { from { transform: translate(0,0) scale(1); } to { transform: translate(6vw, 5vh) scale(1.07); } }
 body.no-clouds .cloud { animation: none !important; }
+/* Hero clouds run more saturated than the softer Join-CTA clouds */
+.hero .cloud { opacity: .72; }
 
 /* ---------- Typography ---------- */
 .serif { font-family: var(--serif); font-weight: 400; }
@@ -277,6 +279,32 @@ section { position: relative; }
   stroke-dashoffset: 0;
 }
 
+/* Hero doodles: draw in one-by-one (staggered via --d) and slowly loop. */
+.hero-a .hero-doodle path,
+.hero-a .hero-doodle line,
+.hero-a .hero-doodle polyline,
+.hero-a .hero-doodle circle {
+  animation: doodle-cycle 16s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+@keyframes doodle-cycle {
+  0%, 6%    { stroke-dashoffset: var(--len, 1000); opacity: 0; }
+  10%       { opacity: 1; }
+  24%       { stroke-dashoffset: 0; opacity: 1; }
+  78%       { stroke-dashoffset: 0; opacity: 1; }
+  92%       { stroke-dashoffset: var(--len, 1000); opacity: 1; }
+  96%, 100% { stroke-dashoffset: var(--len, 1000); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-a .hero-doodle path,
+  .hero-a .hero-doodle line,
+  .hero-a .hero-doodle polyline,
+  .hero-a .hero-doodle circle {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
 /* ---------- Section: gradient bleed ---------- */
 .gradient-section {
   background:
@@ -307,7 +335,6 @@ footer {
   background: var(--ink);
   color: var(--paper);
   padding: 80px 0 40px;
-  margin-top: 80px;
   position: relative;
   overflow: hidden;
 }
@@ -436,7 +463,7 @@ body[data-scribble-density="regular"] .scribble { opacity: .95; }
 .how-sub { font-size: 18px; color: var(--ink-soft); max-width: 480px; margin: 0 auto; }
 .how-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 @media (max-width: 900px) { .how-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 600px) { .how-grid { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .how-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
 .step-n { font-size: 42px; line-height: 1; color: var(--hot-pink); }
 .step-jp { font-size: 12px; letter-spacing: .15em; color: var(--ink-soft); margin: 8px 0 12px; }
 .step-t { font-size: 24px; margin: 0 0 12px; line-height: 1.15; }
@@ -471,7 +498,27 @@ body[data-scribble-density="regular"] .scribble { opacity: .95; }
 .demo-sub { font-size: 18px; line-height: 1.5; color: var(--ink-soft); max-width: 440px; margin: 0; }
 .demo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 @media (max-width: 900px) { .demo-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 600px) { .demo-grid { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .demo-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+
+/* ---------- Mobile post-it cards: compact, scribbles scaled & behind ---------- */
+@media (max-width: 600px) {
+  /* Keep cards above decorative scribbles so they never block content */
+  .how-grid, .demo-grid { position: relative; z-index: 2; }
+  /* Tuck scribbles behind the cards and scale them down with the screen.
+     The svg is scaled (not .scribble) because inline rotate() lives on .scribble. */
+  .how-section .scribble, .demos-section .scribble { z-index: 0; }
+  .scribble svg { transform: scale(.55); transform-origin: top left; }
+  /* Tighter padding + type so cards keep a post-it ratio instead of stretching tall */
+  .note { padding: 16px; }
+  .note .tape { width: 50px; height: 14px; }
+  .step-n { font-size: 30px; }
+  .step-jp { margin: 6px 0 8px; }
+  .step-t { font-size: 18px; margin: 0 0 8px; }
+  .step-body { font-size: 13px; line-height: 1.45; }
+  .demo-card { min-height: 0; }
+  .demo-title { font-size: 19px; margin: 8px 0 4px; }
+  .demo-body { font-size: 13px; line-height: 1.45; }
+}
 .demo-card { min-height: 240px; display: flex; flex-direction: column; }
 .demo-tag { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--hot-pink); }
 .demo-title { font-size: 26px; line-height: 1.15; margin: 12px 0 4px; }
@@ -486,7 +533,7 @@ body[data-scribble-density="regular"] .scribble { opacity: .95; }
 .gallery-sub { font-size: 17px; color: var(--ink-soft); margin: 0; }
 .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px 24px; }
 @media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 500px) { .gallery-grid { grid-template-columns: 1fr; } }
+@media (max-width: 500px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 14px; } }
 .gallery-photo { margin: 0; position: relative; }
 .gallery-photo .photo { aspect-ratio: 4/5; }
 .gallery-foot { text-align: center; margin-top: 56px; }

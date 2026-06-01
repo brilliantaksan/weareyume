@@ -123,9 +123,9 @@ export const DEFAULT_CONTENT: SiteContent = {
       { jp: "渋谷", en: "Shibuya, Tokyo" },
       { jp: "週末 12〜15時", en: "A Socratica node" },
     ],
-    taglineLead: "A space for makers, dreamers & builders\nto work on their ",
-    taglineEm: "high-effort passion projects",
-    taglineTail: "\ntogether at the same table.",
+    taglineLead: "A weekend table for makers, dreamers & builders\nto work on their ",
+    taglineEm: "passion projects",
+    taglineTail: ",\ntogether.",
     ctaPrimary: "Join next session",
     ctaSecondary: "What is Yu+Me?",
     nextEyebrow: "Next gathering",
@@ -143,12 +143,12 @@ export const DEFAULT_CONTENT: SiteContent = {
     headingEm: "your thing",
     headingLine3: "with us.",
     paragraphs: [
-      "Yu+Me is a weekend co-working session in Shibuya, part of [socratica] — a global network of 40+ nodes where students, alumni, artists and tinkerers gather to make stuff together.",
-      "We're united by the love of making things, and we want to help you make your thing. Bring a passion project — coding, writing, knitting, music, gardening, anything. We'll work in Pomodoros, demo what we made, eat snacks, and become friends.",
+      "Yu+Me is a weekly co-working session in Shibuya, and a node of [socratica].",
+      "Bring a passion project. Work alongside other makers, demo what you made, eat snacks, make friends.",
     ],
     socraticaUrl: "https://socratica.info",
-    emph: "No work allowed. No homework.",
-    emphPink: "Just the stuff you'd do anyway, with people who care.",
+    emph: "No work. No homework.",
+    emphPink: "Just the stuff you'd do anyway, with people who get it.",
     stats: [
       { n: "40+", l: "Socratica nodes worldwide" },
       { n: "3h", l: "Per session" },
@@ -158,12 +158,12 @@ export const DEFAULT_CONTENT: SiteContent = {
   how: {
     eyebrow: "流れ · How a session works",
     heading: "3 hours, one table,\neveryone's making.",
-    sub: "Loosely structured. Mostly snacks and Pomodoros.",
+    sub: "Loosely structured. Snacks and Pomodoros.",
     steps: [
-      { n: "01", jp: "集合", t: "Arrive & say hi", body: "Doors open 11:50. We start with snacks, intros and ~15 min of small talk. New face? You'll be welcomed by name.", color: "sky" },
-      { n: "02", jp: "宣言", t: "Declare your project", body: "Everyone gets 30 seconds to say what they're working on today. The smaller and weirder, the better.", color: "peach" },
-      { n: "03", jp: "集中", t: "Pomodoro work blocks", body: "Two 50-minute focus blocks with a 10-minute break between. Headphones in. Get the thing done.", color: "mint" },
-      { n: "04", jp: "発表", t: "Demos & celebrate", body: "Show what you made. 3 bullet points or a half-broken prototype — both count. We clap loudly.", color: "pink" },
+      { n: "01", jp: "集合", t: "Arrive & say hi", body: "Doors at 11:50. Snacks, intros, hellos.", color: "sky" },
+      { n: "02", jp: "宣言", t: "Declare your project", body: "30 seconds each — what are you making today?", color: "peach" },
+      { n: "03", jp: "集中", t: "Two work blocks", body: "Two 50-minute Pomodoros. Headphones in.", color: "mint" },
+      { n: "04", jp: "発表", t: "Demos & celebrate", body: "Show what you made. We clap loudly.", color: "pink" },
     ],
   },
   upcoming: {
@@ -174,7 +174,7 @@ export const DEFAULT_CONTENT: SiteContent = {
   demos: {
     eyebrow: "発表 · Demos",
     heading: "What people\nactually made.",
-    sub: "Whether it's 3 bullet points on a Google Doc or a full-blown prototype, every session ends with demos. Here's a slice.",
+    sub: "Every session ends with demos. Here's a slice.",
   },
   gallery: {
     eyebrow: "記録 · Past sessions",
@@ -238,11 +238,11 @@ export const DEFAULT_GALLERY: GalleryPhoto[] = [
 ];
 
 export const DEFAULT_FAQS: Faq[] = [
-  { id: "seed-1", question: "I'm not technical. Can I still come?", answer: "Absolutely. We've had poets, knitters, gardeners, ceramicists and one person training for a marathon. The only requirement is that you're working on something you actually care about.", sort_order: 0 },
-  { id: "seed-2", question: "What counts as a 'passion project'?", answer: "Whatever's been nagging at you that you haven't made time for. Could be a novel, an app, a song, a piece of furniture, learning a language. Not allowed: work for your job, homework, or anything someone is paying you to do.", sort_order: 1 },
-  { id: "seed-3", question: "Is this in English or Japanese?", answer: "Both. Me and Claudia (your hosts) are still pretty beginner at Japanese and very much learning ourselves — so don't worry about your level either way. About half our regulars are non-Japanese; bring whoever, in whichever language.", sort_order: 2 },
-  { id: "seed-4", question: "Do I need to bring anything?", answer: "Just whatever you need to work on your project. Laptops, sketchbooks, knitting needles, weird hardware. We provide snacks, coffee and washi tape.", sort_order: 3 },
-  { id: "seed-5", question: "How is this different from a normal coworking space?", answer: "There's no 'work' here. Yu+Me is about the things you do because you want to, not because you have to. Plus: demos, snacks, friends.", sort_order: 4 },
+  { id: "seed-1", question: "I'm not technical. Can I still come?", answer: "Always. Just bring something you actually care about.", sort_order: 0 },
+  { id: "seed-2", question: "What counts as a 'passion project'?", answer: "Whatever you keep meaning to make. Not your job or homework.", sort_order: 1 },
+  { id: "seed-3", question: "Is this in English or Japanese?", answer: "Both. Join comfortably in either — about half our regulars are non-Japanese.", sort_order: 2 },
+  { id: "seed-4", question: "Do I need to bring anything?", answer: "Just your project. We bring snacks, coffee and washi tape.", sort_order: 3 },
+  { id: "seed-5", question: "How is this different from a coworking space?", answer: "No 'work' here — only the stuff you do because you want to. Plus demos, snacks, friends.", sort_order: 4 },
 ];
 
 export const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || "hello@weareyume.com";

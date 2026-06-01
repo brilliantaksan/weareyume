@@ -1,3 +1,4 @@
+import * as React from "react";
 import type { SiteContent } from "@/lib/content";
 import { CrossScribble, StarScribble, SwirlScribble } from "@/components/Scribbles";
 
@@ -14,16 +15,16 @@ export function HeroA({ content }: { content: SiteContent }) {
         <div className="cloud c5" style={{ width: "45vw", height: "45vw", left: "35%", top: "30%", background: "radial-gradient(circle, var(--pink-2) 0%, transparent 70%)" }} />
       </div>
 
-      <div className="scribble" style={{ top: "12%", left: "12%", color: "#fff" }}>
+      <div className="scribble hero-doodle" style={{ top: "12%", left: "12%", color: "#fff", "--d": "0s" } as React.CSSProperties}>
         <CrossScribble size={70} color="rgba(255,255,255,.95)" />
       </div>
-      <div className="scribble" style={{ top: "18%", right: "10%", color: "#fff" }}>
+      <div className="scribble hero-doodle" style={{ top: "18%", right: "10%", color: "#fff", "--d": "2.2s" } as React.CSSProperties}>
         <SwirlScribble size={160} color="rgba(255,255,255,.95)" />
       </div>
-      <div className="scribble" style={{ bottom: "12%", left: "16%", color: "#fff" }}>
+      <div className="scribble hero-doodle" style={{ bottom: "12%", left: "16%", color: "#fff", "--d": "4.4s" } as React.CSSProperties}>
         <StarScribble size={140} color="rgba(255,255,255,.95)" />
       </div>
-      <div className="scribble" style={{ bottom: "18%", right: "20%", color: "#fff" }}>
+      <div className="scribble hero-doodle" style={{ bottom: "18%", right: "20%", color: "#fff", "--d": "6.6s" } as React.CSSProperties}>
         <CrossScribble size={50} color="rgba(255,255,255,.9)" />
       </div>
 
