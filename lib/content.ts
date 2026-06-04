@@ -100,6 +100,7 @@ export type SessionRow = {
   luma_url: string;
   is_next: boolean;
   sort_order: number;
+  luma_event_id?: string | null;
 };
 
 export type GalleryPhoto = {

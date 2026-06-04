@@ -733,9 +733,32 @@ function SessionsEditor({
   reload: () => void;
 }) {
   const col = useCollection<SessionRow>(initial);
+  const [syncing, setSyncing] = useState(false);
 
   const setNext = (id: string) =>
     col.setItems((xs) => xs.map((x) => ({ ...x, is_next: x.id === id })));
+
+  const syncFromLuma = async () => {
+    setSyncing(true);
+    try {
+      const secret = process.env.NEXT_PUBLIC_SYNC_SECRET ?? "";
+      const res = await fetch("/api/sync-luma", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${secret}` },
+      });
+      const json = await res.json();
+      if (res.ok) {
+        onSaved(`Synced ${json.synced} session(s) from Luma`);
+        reload();
+      } else {
+        onSaved(`Sync error: ${json.error ?? "unknown"}`);
+      }
+    } catch (err) {
+      onSaved(`Sync failed: ${err instanceof Error ? err.message : String(err)}`);
+    } finally {
+      setSyncing(false);
+    }
+  };
 
   const save = async () => {
     col.setSaving(true);
@@ -781,6 +804,9 @@ function SessionsEditor({
         </div>
       ))}
       <div className="adm-actions">
+        <button className="adm-btn ghost" onClick={syncFromLuma} disabled={syncing}>
+          {syncing ? "Syncing…" : "Sync from Luma"}
+        </button>
         <button
           className="adm-btn ghost"
           onClick={() =>
