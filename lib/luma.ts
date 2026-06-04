@@ -4,7 +4,7 @@
 // Luma calendar page — no API key required.
 //
 // Luma obfuscates venue addresses on public pages (shown only after RSVP), so
-// location falls back to the DEFAULT_LOCATION env var (set to your usual venue).
+// location falls back to the LUMA_DEFAULT_LOCATION env var.
 // Capacity isn't exposed publicly either, so spots text defaults to "RSVP on Luma".
 
 const LUMA_CALENDAR_URL = "https://lu.ma/yume";
@@ -13,6 +13,7 @@ type LumaPageEvent = {
   api_id: string;
   name: string;
   start_at: string;
+  end_at: string;
   url: string; // slug only, e.g. "ucdujbu2" → prepend https://lu.ma/
   geo_address_info?: {
     city_state?: string;
@@ -22,8 +23,9 @@ type LumaPageEvent = {
   waitlist_status?: string;
 };
 
-// ── Parsers ───────────────────────────────────────────────────────────────────
+// ── Field formatters ──────────────────────────────────────────────────────────
 
+// "07.06" for sessions list
 function toDateLabel(iso: string): string {
   const d = new Date(iso);
   const dd = d.toLocaleString("en-US", { day: "2-digit", timeZone: "Asia/Tokyo" });
@@ -31,6 +33,7 @@ function toDateLabel(iso: string): string {
   return `${dd}.${mm}`;
 }
 
+// "Sun" for sessions list
 function toDayLabel(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", {
     weekday: "short",
@@ -38,11 +41,41 @@ function toDayLabel(iso: string): string {
   });
 }
 
+// "Sun. Jun 7" for hero next-gathering badge
+function toHeroDateLabel(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    timeZone: "Asia/Tokyo",
+  }); // e.g. "Sun, Jun 7" — replace comma with period
+    // toLocaleDateString gives "Sun, Jun 7", we want "Sun. Jun 7"
+}
+
+// "Jun 7" for hero short date
+function toHeroDateShort(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    timeZone: "Asia/Tokyo",
+  });
+}
+
+// "12:00 – 15:00" from start + end ISO strings
+function toTimeLabel(startIso: string, endIso: string): string {
+  const fmt = (iso: string) =>
+    new Date(iso).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "Asia/Tokyo",
+    });
+  return `${fmt(startIso)} – ${fmt(endIso)}`;
+}
+
 function toLocation(geo: LumaPageEvent["geo_address_info"]): string {
-  // Address is obfuscated on public pages — fall back to env var (e.g. "Cr/pto Café, Shibuya")
   const fallback = process.env.LUMA_DEFAULT_LOCATION ?? "Shibuya, Tokyo";
   if (!geo) return fallback;
-  // Use city + region if available, otherwise fallback
   const city = geo.city ?? "";
   const region = geo.region ?? "";
   if (city && region && city !== region) return `${city}, ${region}`;
@@ -59,36 +92,29 @@ async function fetchLumaEvents(): Promise<LumaPageEvent[]> {
   }
   const html = await res.text();
 
-  // Luma embeds JSON event data directly in the page HTML.
-  // Each event appears as: "event":{"api_id":"evt-...","name":"...","start_at":"...",...}
   const events: LumaPageEvent[] = [];
-  const pattern = /"api_id":"(evt-[^"]+)","calendar_api_id":"[^"]*","[^}]*"name":"([^"]+)"[^}]*"start_at":"([^"]+)"[^}]*"[^}]*"url":"([^"]+)"/g;
-
-  // More reliable: extract event JSON blobs by finding api_id and getting surrounding context
   const seen = new Set<string>();
   let idx = 0;
+
   while (true) {
     const match = html.indexOf('"api_id":"evt-', idx);
     if (match === -1) break;
     idx = match + 1;
 
-    // Get a 1200-char window around the match — enough for one event object
     const chunk = html.slice(Math.max(0, match - 20), match + 1200);
 
-    // Extract individual fields with simple regex
     const apiId = chunk.match(/"api_id":"(evt-[^"]+)"/)?.[1];
     const name = chunk.match(/"name":"([^"]+)"/)?.[1];
     const startAt = chunk.match(/"start_at":"([^"]+)"/)?.[1];
-    const url = chunk.match(/"url":"([a-z0-9]+)"/)?.[1]; // slug only
+    const endAt = chunk.match(/"end_at":"([^"]+)"/)?.[1];
+    const url = chunk.match(/"url":"([a-z0-9]+)"/)?.[1];
     const calendarId = chunk.match(/"calendar_api_id":"([^"]+)"/)?.[1];
 
     if (!apiId || !name || !startAt || !url || !calendarId) continue;
-    // Only include events belonging to our calendar
     if (calendarId !== (process.env.LUMA_CALENDAR_ID ?? "cal-IVaQNaQwNaI0FC9")) continue;
     if (seen.has(apiId)) continue;
     seen.add(apiId);
 
-    // Extract geo info if present
     const geoMatch = chunk.match(/"geo_address_info":\{([^}]+)\}/);
     let geo: LumaPageEvent["geo_address_info"] = null;
     if (geoMatch) {
@@ -100,7 +126,15 @@ async function fetchLumaEvents(): Promise<LumaPageEvent[]> {
 
     const waitlistStatus = chunk.match(/"waitlist_status":"([^"]+)"/)?.[1];
 
-    events.push({ api_id: apiId, name, start_at: startAt, url, geo_address_info: geo, waitlist_status: waitlistStatus });
+    events.push({
+      api_id: apiId,
+      name,
+      start_at: startAt,
+      end_at: endAt ?? "",
+      url,
+      geo_address_info: geo,
+      waitlist_status: waitlistStatus,
+    });
   }
 
   return events;
@@ -115,12 +149,9 @@ export async function syncLumaEvents(
   const errors: string[] = [];
   const now = new Date();
 
-  // Only upcoming events, sorted chronologically
   const upcoming = allEvents
     .filter((e) => new Date(e.start_at) > now)
     .sort((a, b) => new Date(a.start_at).getTime() - new Date(b.start_at).getTime());
-
-  const nextIndex = 0; // first upcoming is always "next"
 
   for (let i = 0; i < upcoming.length; i++) {
     const event = upcoming[i];
@@ -132,7 +163,7 @@ export async function syncLumaEvents(
       location: toLocation(event.geo_address_info),
       spots: event.waitlist_status === "open" ? "Waitlist open" : "RSVP on Luma",
       luma_url: `https://lu.ma/${event.url}`,
-      is_next: i === nextIndex,
+      is_next: i === 0,
       sort_order: i,
     };
 
@@ -143,7 +174,7 @@ export async function syncLumaEvents(
     if (error) errors.push(`Event ${event.api_id}: ${error.message}`);
   }
 
-  // Remove Luma-synced rows whose events are no longer on the public page.
+  // Remove Luma-synced rows no longer on the public page (deleted events).
   // Manual rows (luma_event_id IS NULL) are never touched.
   if (upcoming.length > 0) {
     const activeIds = upcoming.map((e) => e.api_id);
@@ -154,6 +185,41 @@ export async function syncLumaEvents(
       .not("luma_event_id", "in", `(${activeIds.join(",")})`);
 
     if (error) errors.push(`Cleanup: ${error.message}`);
+  }
+
+  // Also update site_content.next to match the first upcoming event,
+  // so the hero "Next gathering" badge and join CTA stay in sync.
+  if (upcoming.length > 0) {
+    const next = upcoming[0];
+    const location = toLocation(next.geo_address_info);
+
+    const { data: contentRow } = await supabaseService
+      .from("site_content")
+      .select("data")
+      .eq("id", 1)
+      .maybeSingle();
+
+    if (contentRow?.data) {
+      const raw = toHeroDateLabel(next.start_at);
+      const updated = {
+        ...contentRow.data,
+        next: {
+          ...contentRow.data.next,
+          dateLabel: raw.replace(",", "."),
+          dateShort: toHeroDateShort(next.start_at),
+          timeLabel: next.end_at ? toTimeLabel(next.start_at, next.end_at) : contentRow.data.next.timeLabel,
+          locationLabel: location,
+          lumaUrl: `https://lu.ma/${next.url}`,
+        },
+      };
+
+      const { error } = await supabaseService
+        .from("site_content")
+        .update({ data: updated })
+        .eq("id", 1);
+
+      if (error) errors.push(`site_content.next: ${error.message}`);
+    }
   }
 
   return { synced: upcoming.length, errors };
