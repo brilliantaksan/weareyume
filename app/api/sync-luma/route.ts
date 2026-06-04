@@ -1,17 +1,29 @@
 import { NextResponse } from "next/server";
 import { syncLumaEvents } from "@/lib/luma";
 import { createServiceClient } from "@/lib/supabase/service";
+import { createClient } from "@/lib/supabase/server";
+import { ADMIN_EMAIL } from "@/lib/content";
 
 async function handle(request: Request) {
   const auth = request.headers.get("authorization") ?? "";
   const syncSecret = process.env.SYNC_SECRET;
   const cronSecret = process.env.CRON_SECRET;
 
-  const isAdmin = syncSecret && auth === `Bearer ${syncSecret}`;
-  const isCron = cronSecret && auth === `Bearer ${cronSecret}`;
+  const isSecret =
+    (syncSecret && auth === `Bearer ${syncSecret}`) ||
+    (cronSecret && auth === `Bearer ${cronSecret}`);
 
-  if (!isAdmin && !isCron) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!isSecret) {
+    // Fall back to checking if the caller is the logged-in admin user
+    const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const sb = createClient();
+    const { data: { user } } = await sb.auth.getUser(token);
+    if (!user || user.email !== ADMIN_EMAIL) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
   }
 
   try {

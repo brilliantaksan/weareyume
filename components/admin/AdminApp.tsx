@@ -741,10 +741,12 @@ function SessionsEditor({
   const syncFromLuma = async () => {
     setSyncing(true);
     try {
-      const secret = process.env.NEXT_PUBLIC_SYNC_SECRET ?? "";
+      const sb = createClient();
+      const { data: { session } } = await sb.auth.getSession();
+      const token = session?.access_token ?? "";
       const res = await fetch("/api/sync-luma", {
         method: "POST",
-        headers: { Authorization: `Bearer ${secret}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
       const json = await res.json();
       if (res.ok) {
