@@ -8,23 +8,23 @@ export function HeroA({ content }: { content: SiteContent }) {
   return (
     <section className="hero hero-a">
       <div className="cloud-stage">
-        <div className="cloud c1" style={{ width: "75vw", height: "75vw", left: "-25%", top: "-30%", background: "radial-gradient(circle, var(--sky) 0%, var(--sky) 25%, transparent 65%)" }} />
-        <div className="cloud c2" style={{ width: "60vw", height: "60vw", right: "-15%", top: "5%", background: "radial-gradient(circle, var(--pink) 0%, var(--pink) 20%, transparent 65%)" }} />
-        <div className="cloud c3" style={{ width: "65vw", height: "65vw", left: "10%", bottom: "-35%", background: "radial-gradient(circle, var(--mint) 0%, var(--mint) 22%, transparent 65%)" }} />
-        <div className="cloud c4" style={{ width: "55vw", height: "55vw", right: "5%", bottom: "-25%", background: "radial-gradient(circle, var(--peach) 0%, var(--peach) 20%, transparent 65%)" }} />
-        <div className="cloud c5" style={{ width: "45vw", height: "45vw", left: "35%", top: "30%", background: "radial-gradient(circle, var(--pink-2) 0%, transparent 70%)" }} />
+        <div className="cloud c1" style={{ width: "75vmax", height: "75vmax", left: "-25%", top: "-30%", background: "radial-gradient(circle, var(--sky) 0%, var(--sky) 25%, transparent 65%)" }} />
+        <div className="cloud c2" style={{ width: "60vmax", height: "60vmax", right: "-15%", top: "5%", background: "radial-gradient(circle, var(--pink) 0%, var(--pink) 20%, transparent 65%)" }} />
+        <div className="cloud c3" style={{ width: "65vmax", height: "65vmax", left: "10%", bottom: "-35%", background: "radial-gradient(circle, var(--mint) 0%, var(--mint) 22%, transparent 65%)" }} />
+        <div className="cloud c4" style={{ width: "55vmax", height: "55vmax", right: "5%", bottom: "-25%", background: "radial-gradient(circle, var(--peach) 0%, var(--peach) 20%, transparent 65%)" }} />
+        <div className="cloud c5" style={{ width: "45vmax", height: "45vmax", left: "35%", top: "30%", background: "radial-gradient(circle, var(--pink-2) 0%, transparent 70%)" }} />
       </div>
 
-      <div className="scribble hero-doodle" style={{ top: "12%", left: "12%", color: "#fff", "--d": "0s" } as React.CSSProperties}>
+      <div className="scribble hero-doodle hd1" style={{ top: "12%", left: "12%", color: "#fff", "--d": "0s" } as React.CSSProperties}>
         <CrossScribble size={70} color="rgba(255,255,255,.95)" />
       </div>
-      <div className="scribble hero-doodle" style={{ top: "18%", right: "10%", color: "#fff", "--d": "2.2s" } as React.CSSProperties}>
+      <div className="scribble hero-doodle hd2" style={{ top: "18%", right: "10%", color: "#fff", "--d": "2.2s" } as React.CSSProperties}>
         <SwirlScribble size={160} color="rgba(255,255,255,.95)" />
       </div>
-      <div className="scribble hero-doodle" style={{ bottom: "12%", left: "16%", color: "#fff", "--d": "4.4s" } as React.CSSProperties}>
+      <div className="scribble hero-doodle hd3" style={{ bottom: "12%", left: "16%", color: "#fff", "--d": "4.4s" } as React.CSSProperties}>
         <StarScribble size={140} color="rgba(255,255,255,.95)" />
       </div>
-      <div className="scribble hero-doodle" style={{ bottom: "18%", right: "20%", color: "#fff", "--d": "6.6s" } as React.CSSProperties}>
+      <div className="scribble hero-doodle hd4" style={{ bottom: "18%", right: "20%", color: "#fff", "--d": "6.6s" } as React.CSSProperties}>
         <CrossScribble size={50} color="rgba(255,255,255,.9)" />
       </div>
 

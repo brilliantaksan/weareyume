@@ -94,6 +94,16 @@ button { font: inherit; color: inherit; }
 body.no-clouds .cloud { animation: none !important; }
 /* Hero clouds run more saturated than the softer Join-CTA clouds */
 .hero .cloud { opacity: .72; }
+/* On mobile the vw-sized clouds shrink while blur stays fixed, washing color
+   out — so enlarge them, soften the blur, and push opacity up to match desktop. */
+/* On narrow / portrait viewports the clouds are sized in vmax (see Hero.tsx) so
+   they fill the screen; bump opacity + soften blur so the color stays rich. */
+@media (max-width: 1024px) {
+  .hero .cloud { opacity: .85; filter: blur(55px); }
+}
+@media (max-width: 700px) {
+  .hero .cloud { opacity: .92; filter: blur(48px); }
+}
 
 /* ---------- Typography ---------- */
 .serif { font-family: var(--serif); font-weight: 400; }
@@ -362,6 +372,16 @@ body[data-scribble-density="regular"] .scribble { opacity: .95; }
 
 /* ---------- Hero A ---------- */
 .hero-a { min-height: 100vh; display: grid; place-items: center; padding: 140px 0 100px; position: relative; overflow: hidden; }
+/* Soft paper halo behind the text so the mark + tagline stay readable, while the
+   corners keep their cloud color. Sits above the clouds (z0) but below text (z2). */
+.hero-a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(58% 42% at 50% 44%, var(--paper) 0%, rgba(251,249,245,.72) 32%, rgba(251,249,245,.3) 55%, transparent 72%);
+}
 .hero-inner { position: relative; z-index: 2; text-align: center; max-width: 1100px; padding: 0 32px; }
 .hero-mark {
   font-size: clamp(96px, 18vw, 260px);
@@ -406,9 +426,30 @@ body[data-scribble-density="regular"] .scribble { opacity: .95; }
 }
 .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin: 0; }
 .hero-next { position: absolute; bottom: 32px; right: 32px; z-index: 3; display: inline-flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 18px 22px; background: rgba(255,255,255,.75); backdrop-filter: blur(10px); border-radius: 14px; text-align: left; box-shadow: 0 10px 30px -15px rgba(0,0,0,.2); }
-@media (max-width: 700px) { .hero-next { right: 16px; bottom: 16px; padding: 14px 18px; } .next-line { font-size: 18px !important; } }
+@media (max-width: 700px) {
+  /* Flow it below the CTAs instead of overlapping them */
+  .hero-next {
+    position: static;
+    right: auto; bottom: auto;
+    margin: 28px auto 0;
+    align-items: center;
+    text-align: center;
+    padding: 12px 18px;
+  }
+  .next-line { font-size: 17px !important; }
+}
 .next-line { font-size: 22px; }
 .next-sub { font-size: 13px; color: var(--ink-soft); }
+/* Mobile: move hero doodles into the gaps around the text so none overlap it.
+   (!important overrides the per-doodle inline desktop positions.) */
+@media (max-width: 700px) {
+  .hero-a .hd1 { top: 9.5% !important; left: 5% !important; right: auto !important; bottom: auto !important; }
+  .hero-a .hd2 { top: auto !important; bottom: 0.5% !important; right: 5% !important; left: auto !important; }
+  .hero-a .hd3 { top: auto !important; bottom: 0.5% !important; left: 5% !important; right: auto !important; }
+  /* bottom-anchored doodles scale from the bottom so they sit in the strip below the next-box */
+  .hero-a .hd2 svg, .hero-a .hd3 svg { transform-origin: bottom left !important; }
+  .hero-a .hd4 { top: 56.5% !important; left: 6% !important; right: auto !important; bottom: auto !important; }
+}
 
 /* ---------- Hero B ---------- */
 .hero-b { padding: 100px 0 0; position: relative; overflow: hidden; }
@@ -454,6 +495,12 @@ body[data-scribble-density="regular"] .scribble { opacity: .95; }
 .manifesto-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; padding-top: 32px; border-top: 1px solid rgba(24,20,16,.15); }
 .stat-n { font-size: 48px; line-height: 1; color: var(--ink); }
 .stat-l { font-size: 13px; color: var(--ink-soft); margin-top: 6px; letter-spacing: .02em; }
+/* On mobile, move the underline doodle into the empty space to the right of the
+   wrapped heading (beside "your thing / with us") instead of over the top line. */
+@media (max-width: 700px) {
+  .manifesto-left .scribble { top: 58px; bottom: auto; right: 10px; }
+  .manifesto-left .scribble svg { transform: scale(.55); transform-origin: top right; }
+}
 
 /* ---------- How it works ---------- */
 .how-section { background: var(--paper); position: relative; overflow: hidden; }
@@ -486,8 +533,12 @@ body[data-scribble-density="regular"] .scribble { opacity: .95; }
 .up-arrow { font-size: 22px; color: var(--hot-pink); transition: transform .2s; }
 .up-row:hover .up-arrow { transform: translateX(4px); }
 @media (max-width: 700px) {
-  .up-row { grid-template-columns: 1fr; gap: 8px; }
-  .up-right { justify-content: space-between; }
+  .up-row { grid-template-columns: 1fr; gap: 2px; padding: 16px 20px; }
+  .up-date { flex-direction: row; align-items: baseline; gap: 8px; }
+  .up-d { font-size: 24px; }
+  .up-day { margin-top: 0; }
+  .up-title { font-size: 17px; margin-top: 2px; }
+  .up-right { justify-content: flex-start; margin-top: 4px; }
 }
 
 /* ---------- Demos ---------- */
@@ -515,15 +566,20 @@ body[data-scribble-density="regular"] .scribble { opacity: .95; }
   .step-jp { margin: 6px 0 8px; }
   .step-t { font-size: 18px; margin: 0 0 8px; }
   .step-body { font-size: 13px; line-height: 1.45; }
-  .demo-card { min-height: 0; }
-  .demo-title { font-size: 19px; margin: 8px 0 4px; }
-  .demo-body { font-size: 13px; line-height: 1.45; }
 }
 .demo-card { min-height: 240px; display: flex; flex-direction: column; }
 .demo-tag { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--hot-pink); }
 .demo-title { font-size: 26px; line-height: 1.15; margin: 12px 0 4px; }
 .demo-by { font-size: 13px; color: var(--ink-soft); margin-bottom: 16px; font-style: italic; }
 .demo-body { font-size: 15px; line-height: 1.5; color: var(--ink-soft); margin: 0; }
+/* Compact demo cards on mobile (placed after the base rules so these win) */
+@media (max-width: 600px) {
+  .demo-card { min-height: 0; }
+  .demo-tag { font-size: 10px; letter-spacing: .12em; }
+  .demo-title { font-size: 18px; line-height: 1.1; margin: 6px 0 2px; }
+  .demo-by { margin-bottom: 8px; }
+  .demo-body { font-size: 13px; line-height: 1.4; }
+}
 
 /* ---------- Gallery ---------- */
 .gallery-section { background: var(--paper); }
